@@ -66,7 +66,7 @@ app.get("/", async (req, res) => {
             version: "1",
             permissions: ["managed_availability", "account_management","agenda"],
             subs: [cronofyClient.sub],
-            origin: "https://cronofy.onrender.com/",//"http://localhost:7070",
+            origin: "https://cronofy.onrender.com",//"http://localhost:7070",
         })
         .catch((err) => {
             console.error(
@@ -94,7 +94,7 @@ app.get("/availability", async (req, res) => {
             version: "1",
             permissions: ["availability"],
             subs: [cronofyClient.sub],
-            origin: "https://cronofy.onrender.com/",//"http://localhost:7070",
+            origin: "https://cronofy.onrender.com",//"http://localhost:7070",
         })
         .catch(() => {
             console.error(
