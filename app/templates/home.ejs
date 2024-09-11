@@ -20,8 +20,9 @@
             </div>
 
             <div>
-                <a href="/availability" class="button">View availability</a>
+                <button onclick="location.href ='/availability';" id="actionButton" disabled  class="button">View availability</a>
             </div>
+
 
             <hr>
 
@@ -33,7 +34,9 @@
 
         <script src="https://elements.cronofy.com/js/CronofyElements.v1.56.2.js"></script>
         <script>
+            const actionButton = document.getElementById('actionButton');
              if ("<%= element_token %>" !== "invalid" ) {
+                actionButton.disabled = false;
                 CronofyElements.CalendarSync({
                 element_token: "<%= element_token %>",
                 data_center: "<%= data_center %>",
