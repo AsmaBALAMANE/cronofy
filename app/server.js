@@ -9,7 +9,7 @@ const moment = require("moment");
 dotenv.config();
 
 // Setup
-const PORT = 7070;
+const PORT = 443;
 
 // Setup Express
 const app = express();
