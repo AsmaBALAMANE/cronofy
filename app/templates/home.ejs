@@ -33,7 +33,8 @@
 
         <script src="https://elements.cronofy.com/js/CronofyElements.v1.56.2.js"></script>
         <script>
-            CronofyElements.CalendarSync({
+             if ("<%= element_token %>" !== "invalid" ) {
+                CronofyElements.CalendarSync({
                 element_token: "<%= element_token %>",
                 data_center: "<%= data_center %>",
                 target_id: "cronofy-calendar-sync",
@@ -41,24 +42,39 @@
                     redirect_uri: "http://localhost:7070/",
                     client_id: "<%= client_id %>",
                     scope: "read_write"
+                     }
+                 });
+             }else{
+                CronofyElements.CalendarSync({
+                //element_token: "<%= element_token %>",
+                data_center: "<%= data_center %>",
+                target_id: "cronofy-calendar-sync",
+                authorization: {
+                    redirect_uri: "http://localhost:7070/",
+                    client_id: "<%= client_id %>",
+                    scope: "read_write"
                 }
-            });
+                 });
+                
+                    }
+
 
             const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
+            
             if ("<%= element_token %>" !== "invalid") {
-                CronofyElements.AvailabilityRules({
+                CronofyElements.Agenda({
                     element_token: "<%= element_token %>",
                     data_center: "<%= data_center %>",
                     target_id: "cronofy-availability-rules",
-                    availability_rule_id: "work_hours",
-                    tzid: timezone
+                    //availability_rule_id: "work_hours",
+                    tzid: timezone,
+                    styles: {
+                         colors: {
+                         calendars: ["#6c25be", "#ffdc00"]
+                        }},
+                   locale: "fr",
                 });
-            } else {
-                const errorMessageWrapper = document.querySelector('#cronofy-availability-rules');
-                errorMessageWrapper.innerHTML = "<span class='error'>There was a problem generating the element token. Check that your <code>CLIENT_ID</code>, <code>CLIENT_SECRET</code>, and <code>SUB</code> environment variables are correct.</span>"
-            }
-
+            } 
         </script>
 
         <footer class="footer">

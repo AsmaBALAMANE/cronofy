@@ -2,6 +2,8 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const bodyParser = require("body-parser");
+const moment = require("moment");
+
 
 // Enable dotenv
 dotenv.config();
@@ -21,7 +23,8 @@ const cronofyClient = new Cronofy({
     client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET,
     data_center: process.env.DATA_CENTER,
-    access_token: process.env.ACCESS_TOKEN,
+    access_token: null,
+    sub:null
 });
 
 // Route: home
@@ -35,7 +38,7 @@ app.get("/", async (req, res) => {
                 client_secret: process.env.CLIENT_SECRET,
                 grant_type: "authorization_code",
                 code: codeQuery,
-                redirect_uri: "http://localhost:7070/",
+                redirect_uri: process.env.REDIRECT_URI,
             })
             .catch((err) => {
                 if (err.error === "invalid_grant") {
@@ -52,13 +55,15 @@ app.get("/", async (req, res) => {
                     );
                 }
             });
+            cronofyClient.access_token=codeResponse.access_token;
+            cronofyClient.sub=codeResponse.sub;
     }
 
     const token = await cronofyClient
         .requestElementToken({
             version: "1",
-            permissions: ["managed_availability", "account_management"],
-            subs: [process.env.SUB],
+            permissions: ["managed_availability", "account_management","agenda"],
+            subs: [cronofyClient.sub],
             origin: "http://localhost:7070",
         })
         .catch(() => {
@@ -83,7 +88,7 @@ app.get("/availability", async (req, res) => {
         .requestElementToken({
             version: "1",
             permissions: ["availability"],
-            subs: [process.env.SUB],
+            subs: [cronofyClient.sub],
             origin: "http://localhost:7070",
         })
         .catch(() => {
@@ -98,7 +103,7 @@ app.get("/availability", async (req, res) => {
     return res.render("availability", {
         element_token: token.element_token.token,
         data_center: process.env.DATA_CENTER,
-        sub: process.env.SUB,
+        sub: cronofyClient.sub,
     });
 });
 
