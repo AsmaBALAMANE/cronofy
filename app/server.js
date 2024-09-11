@@ -57,6 +57,8 @@ app.get("/", async (req, res) => {
             });
             cronofyClient.access_token=codeResponse.access_token;
             cronofyClient.sub=codeResponse.sub;
+        console.log(cronofyClient.access_token);
+         console.log(cronofyClient.sub);
     }
 
     const token = await cronofyClient
@@ -66,15 +68,18 @@ app.get("/", async (req, res) => {
             subs: [cronofyClient.sub],
             origin: "https://cronofy.onrender.com/",//"http://localhost:7070",
         })
-        .catch(() => {
+        .catch((err) => {
             console.error(
                 "\x1b[31m",
                 "\nERROR:\nThere was a problem generating the element token. Check that your CLIENT_ID, CLIENT_SECRET, and SUB environment variables are correct.\n",
                 "\x1b[0m"
             );
+               console.log(err);
+             console.log(cronofyClient.sub);
             return { element_token: { token: "invalid" } };
-        });
 
+        });
+  console.log(token.element_token.token);
     return res.render("home", {
         element_token: token.element_token.token,
         client_id: process.env.CLIENT_ID,
